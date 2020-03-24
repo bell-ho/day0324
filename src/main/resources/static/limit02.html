@@ -7,18 +7,21 @@
 <script type="text/javascript">
 $(function(){
 	$("textarea").keyup(function(){
+		var str = $(this).val();
 		var inputLength = $(this).val().length;
 		var remain = 150-inputLength;
-		$("h1").html(remain);
 		
-		if(remain >= 0){
-			$("h1").css("color","black");
-		}else{
-			$("h1").css("color","red");
+		if(remain <= 0){
+			str = str.substr(0,150);
+			$(this).val(str);
 		}
+		
+		$("h1").html(remain);
+		//150자가 넘어갈시 글씨가 안써짐
+		
+		
 	})
 })
-//150자를 넘어서면 빨갛게 나옴
 </script>
 </head>
 <body>
