@@ -10,7 +10,7 @@
 }
 
 .animation_canvas{
-	/*overflow:hidden;*/
+	overflow:hidden;
 	position: relative;
 	width: 600px;
 	height: 400px;
@@ -44,34 +44,54 @@
 	top: 380px;
 	left: 270px;
 	height: 13px;
-	overflow: hidden;
+ 	overflow: hidden; 
 }
 
 .control_button{
 	width: 12px;
 	height: 46px;
 	position: relative;
-
+	
 	float: left;
 	cursor: pointer;
-	background: url("/img/controll_button.png");
+	background: red;
 }
 
 .control_button:hover {top:-16px;}
 .control_button:active {top:-32px;}
 
+.active{
+	top:-32px;
+}
+
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 $(function(){
+	function moveSlider(index){
+		var x = -(index * 600);
+		$(".slider_panel").animate({left:x},'slow');
+		
+		$(".slider_text[data-index="+index+"]").show().animate({left:0},'slow');
+		$(".slider_text[data-index!="+index+"]").hide().animate({left:-300},'slow');
+		
+		$(".control_button[data-index="+index+"]").addClass("active");
+		$(".control_button[data-index!="+index+"]").removeClass("active");
+	}
+	
 	$(".slider_text").css("left",-300).each(function(idx){
 		$(this).attr("data-index",idx);
 	});
-
+	
 	$(".control_button").each(function(idx){
 		$(this).attr("data-index",idx);
-	})
-
+	}).click(function(){
+		var index = $(this).attr("data-index");
+		moveSlider(index);
+	});
+	
+	var i = Math.round(Math.random()*4);
+	moveSlider(i);
 });
 </script>
 </head>
@@ -85,7 +105,7 @@ $(function(){
 			<img class="slider_image" src="/img/cloth4.jpg">
 			<img class="slider_image" src="/img/cloth5.jpg">
 		</div>
-
+		
 		<div class="slider_text_panel">
 			<div class="slider_text">
 				<h1>À¯´ÏÆû1</h1>
@@ -108,7 +128,7 @@ $(function(){
 				<p>À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1À¯´ÏÆû1  </p>
 			</div>		
 		</div>
-
+		
 		<div class="control_panel">
 			<div class="control_button"></div>
 			<div class="control_button"></div>

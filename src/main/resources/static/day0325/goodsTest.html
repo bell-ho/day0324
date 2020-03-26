@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style type="text/css">
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
+.animation_canvas{
+	overflow:hidden;
+	position: relative;
+	width: 600px;
+	height: 400px;
+}
+
+.slider_panel{
+	/*width: 3000px;*/
+	position:relative;
+}
+
+.slider_image{
+	float: left;
+	width: 600px;
+	height: 400px;
+}
+
+.slider_text_panel{
+	position: absolute;
+	top: 200px;
+	left: 50px;
+}
+
+.slider_text{
+	position: absolute;
+	width: 250px;
+	height: 150px;
+}
+
+.control_panel{
+	position: absolute;
+	top: 380px;
+	left: 270px;
+	height: 13px;
+	overflow: hidden;
+}
+
+.control_button{
+	width: 12px;
+	height: 46px;
+	position: relative;
+	
+	float: left;
+	cursor: pointer;
+	background: url("/img/controll_button.png");
+}
+
+.control_button:hover {top:-16px;}
+.control_button:active {top:-32px;}
+
+.active{
+	top:-32px;
+}
+
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	
+	$.getJSON("/goodsList", function(data){
+		var w = data.length * 600;
+		$(".slider_panel").css("width",w+"px");
+		
+		$.each(data, function(idx, g){
+			
+			//이미지 생성하기
+			var img = $("<img class='slider_image'/>").attr("src","/img/"+g.fname);
+			$(".slider_panel").append(img);
+			
+			//텍스트 노드 생성하기
+			var div = $("<div class='slider_text'></div>").attr("data-index",idx).css("left",-300);
+			var name = $("<h1></h1>").html(g.item);
+			var price = $("<p></p>").html("가격:"+g.price);
+			var detail = $("<p></p>").html(g.detail);
+			$(div).append(name,price,detail);
+			$(".slider_text_panel").append(div);
+			
+			//컨트롤 버튼 생성하기
+			var cb = $("<div class='control_button'></div>").attr("data-index",idx);
+			$(".control_panel").append(cb);
+			$(cb).click(function(){
+				var index = $(this).attr("data-index");
+				moveSlider(index);
+			});
+		});
+	});
+	
+	function moveSlider(index){
+		var x = -(index * 600);
+		$(".slider_panel").animate({left:x},'slow');
+		
+		$(".slider_text[data-index="+index+"]").show().animate({left:0},'slow');
+		$(".slider_text[data-index!="+index+"]").hide().animate({left:-300},'slow');
+		
+		$(".control_button[data-index="+index+"]").addClass("active");
+		$(".control_button[data-index!="+index+"]").removeClass("active");
+	}
+	/*
+	$(".slider_text").css("left",-300).each(function(idx){
+		$(this).attr("data-index",idx);
+	});*/
+	
+	/*
+	$(".control_button").each(function(idx){
+		$(this).attr("data-index",idx);
+	}).click(function(){
+		var index = $(this).attr("data-index");
+		moveSlider(index);
+	});*/
+	
+	var i = Math.round(Math.random()*4);
+	moveSlider(i);
+});
+</script>
+</head>
+<body>
+	<h1>이미지 슬라이더</h1>
+	<div class="animation_canvas">
+		<div class="slider_panel">
+		</div>
+		
+		<div class="slider_text_panel">			
+		</div>
+		
+		<div class="control_panel">			
+		</div>
+	</div>	
+	<h1>이미지 슬라이더</h1>	
+</body>
+</html>
